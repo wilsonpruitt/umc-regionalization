@@ -66,9 +66,22 @@ Inherited from `~/denominations/CONVENTIONS.md`:
 
 ## Still to do
 
-- Editorial `summary` and `whatChanged` for the 29 paragraphs. Currently every
-  index row reads "summary not yet written," which is honest but not yet useful.
 - Vercel project on the Labs team, DNS-only record at Cloudflare.
+- Send the Publishing House a note describing the scope of quotation (see
+  `src/pages/rights.astro`). Not a blocker; the fair-use posture stands.
+
+## The editorial layer
+
+`src/editorial/summaries.ts` holds the per-paragraph `summary` and `whatChanged`,
+keyed by **Discipline** number. It lives outside `src/content/paragraphs/`
+because the extractor clears that directory on every run. A build-time gate
+fails on a missing entry or an orphaned one, so the set cannot drift out of sync
+with the corpus.
+
+`GAPS.md` records the survey of published explainers this was written against —
+what they claim, what checks out, and what they leave unexplained. Read it before
+revising the summaries; several of them are deliberately answering a specific
+public gap.
 
 ## Feeding church-documents
 
