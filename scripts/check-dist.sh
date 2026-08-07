@@ -44,5 +44,21 @@ if ! grep -qs "post-ratification text here is the ballot text" dist/sources/inde
   fail=1
 fi
 
+# 5. The site quotes copyrighted text under a fair-use rationale. The attribution
+#    is the thing that makes that posture defensible, so it is gated, not trusted:
+#    it must appear on EVERY page, and the rights page must exist.
+missing=0
+while IFS= read -r f; do
+  grep -qs "United Methodist Publishing House" "$f" || { missing=$((missing+1)); echo "    ${f#dist/}"; }
+done < <(find dist -name "*.html")
+if [ "$missing" -gt 0 ]; then
+  echo "FAIL: UMPH attribution missing from ${missing} page(s) (listed above)."
+  fail=1
+fi
+if ! grep -qs "creativecommons.org/licenses/by-nc/4.0" dist/rights/index.html; then
+  echo "FAIL: /rights is missing or does not state the licence."
+  fail=1
+fi
+
 [ "$fail" -eq 0 ] && echo "OK: dist/ is clean — 29 paragraphs, notice intact."
 exit "$fail"

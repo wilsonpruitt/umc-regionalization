@@ -1,0 +1,31 @@
+Copyright (c) 2026 Wroot Labs LLC
+
+## The quoted texts are NOT covered by this licence
+
+"The Book of Discipline of The United Methodist Church" (2020/2024) is
+(c) The United Methodist Publishing House. The text of Petition 21039 is the
+work of the General Conference of The United Methodist Church. Wroot Labs
+claims no copyright in either and grants no rights over either. They are quoted
+on this site for commentary and explanation.
+
+Specifically NOT licensed here: the contents of the `textOld` and `textNew`
+fields in src/content/paragraphs/*.yaml, the corresponding text rendered on
+every /p/[n] page, and the archived PDFs under sources/.
+
+Claiming a licence over someone else's copyrighted text would be meaningless,
+and claiming one over a text we did not write is worse than meaningless.
+
+## The editorial work IS covered
+
+Everything else in this repository is licensed under Creative Commons
+Attribution-NonCommercial 4.0 International (CC BY-NC 4.0):
+https://creativecommons.org/licenses/by-nc/4.0/
+
+That includes the plain-English summaries and "what changed" notes; the
+narrative pages; the extraction, segmentation and alignment code; the generated
+word-level comparisons; and the concordance between ballot paragraph numbers and
+Book of Discipline paragraph numbers together with the reasoning that
+established it.
+
+Permission for other uses is given readily and free for scholarly and ecclesial
+purposes: wilson@wrootlabs.com
