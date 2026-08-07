@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro";
 import Base from "../../layouts/Base.astro";
 import { allParagraphs, groupLabel, statusLabel } from "../../lib/paragraphs";
 import { diffWords } from "../../lib/diff";
+import { crossRefs } from "../../lib/crossrefs";
 
 export const getStaticPaths = (async () => {
   const all = await allParagraphs();
@@ -20,6 +21,7 @@ const d = p.data;
 const showDiff =
   d.status === "amended" && !d.rewritten && !d.elided && d.textOld && d.textNew;
 const tokens = showDiff ? diffWords(d.textOld.trim(), d.textNew.trim()) : null;
+const refs = crossRefs(d.textNew);
 ---
 
 <Base
@@ -114,6 +116,43 @@ const tokens = showDiff ? diffWords(d.textOld.trim(), d.textNew.trim()) : null;
       }
     </section>
   </div>
+
+  {
+    refs.length > 0 && (
+      <>
+        <h2>Where it points</h2>
+        <p>
+          This paragraph cites {refs.length === 1 ? "another paragraph" : "other paragraphs"} of
+          the Constitution — and cites {refs.length === 1 ? "it" : "them"} in <strong>ballot
+          numbering</strong>, the numbering the amendment was drafted against. Following the
+          citation as printed, into the 2024 Book of Discipline, lands on the wrong paragraph.
+          The text is left exactly as ratified; the translation is below.
+        </p>
+        <table class="para-table">
+          <thead>
+            <tr>
+              <th scope="col">As printed</th>
+              <th scope="col">In the 2024 Discipline</th>
+              <th scope="col">Which is</th>
+            </tr>
+          </thead>
+          <tbody>
+            {refs.map((r) => (
+              <tr>
+                <td class="num">¶{r.cited}</td>
+                <td class="num">
+                  <a href={`/p/${r.target}`}>¶{r.resolved}</a>
+                </td>
+                <td>
+                  <p>{r.describes}</p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    )
+  }
 
   {
     tokens && (
