@@ -1,6 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
-import { grouped, statusLabel } from "../lib/paragraphs";
+import { grouped, statusLabel, editorial } from "../lib/paragraphs";
 
 const groups = await grouped();
 const total = groups.reduce((n, g) => n + g.paras.length, 0);
@@ -49,15 +49,7 @@ const total = groups.reduce((n, g) => n + g.paras.length, 0);
                   </a>
                 </td>
                 <td>
-                  <p>
-                    {p.data.summary ?? (
-                      <em>
-                        Article{" "}
-                        {p.data.articleNew || p.data.articleOld}. Plain-English
-                        summary not yet written.
-                      </em>
-                    )}
-                  </p>
+                  <p>{editorial(p)?.summary ?? p.data.summary}</p>
                 </td>
                 <td>
                   <span

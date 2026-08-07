@@ -1,19 +1,36 @@
 ---
 import type { GetStaticPaths } from "astro";
 import Base from "../../layouts/Base.astro";
-import { allParagraphs, groupLabel, statusLabel } from "../../lib/paragraphs";
+import { allParagraphs, grouped, groupLabel, statusLabel, editorial } from "../../lib/paragraphs";
 import { diffWords } from "../../lib/diff";
 import { crossRefs } from "../../lib/crossrefs";
 
 export const getStaticPaths = (async () => {
   const all = await allParagraphs();
+  const groups = await grouped();
+
+  // The section label must come from the group, not from the paragraph, because
+  // the amendment renames Section V from "Central Conferences" to "Regional
+  // Conferences" and only one paragraph carries the new heading. Reading it off
+  // the paragraph alone left every page in that section captioned with the
+  // superseded name.
+  const label = new Map<number, string>();
+  for (const g of groups) {
+    for (const q of g.paras) label.set(q.data.disciplineNumber, g.label);
+  }
+
   return all.map((p, i) => ({
     params: { n: String(p.data.disciplineNumber) },
-    props: { p, prev: all[i - 1] ?? null, next: all[i + 1] ?? null },
+    props: {
+      p,
+      section: label.get(p.data.disciplineNumber) ?? groupLabel(p),
+      prev: all[i - 1] ?? null,
+      next: all[i + 1] ?? null,
+    },
   }));
 }) satisfies GetStaticPaths;
 
-const { p, prev, next } = Astro.props;
+const { p, section, prev, next } = Astro.props;
 const d = p.data;
 
 // A diff only helps where the paragraph was edited rather than replaced. On the
@@ -22,16 +39,17 @@ const showDiff =
   d.status === "amended" && !d.rewritten && !d.elided && d.textOld && d.textNew;
 const tokens = showDiff ? diffWords(d.textOld.trim(), d.textNew.trim()) : null;
 const refs = crossRefs(d.textNew);
+const ed = editorial(p);
 ---
 
 <Base
   title={`¶${d.disciplineNumber} — UMC regionalization`}
-  description={d.summary ?? `The text of ¶${d.disciplineNumber} before and after the regionalization amendment.`}
+  description={ed?.summary ?? `The text of ¶${d.disciplineNumber} before and after the regionalization amendment.`}
 >
   <div class="para-head">
-    <p class="eyebrow">{groupLabel(p)}</p>
+    <p class="eyebrow">{section}</p>
     <h1>¶{d.disciplineNumber}</h1>
-    {d.summary && <p class="subtitle">{d.summary}</p>}
+    {ed && <p class="subtitle">{ed.summary}</p>}
 
     <dl class="para-nums">
       <div>
@@ -71,10 +89,10 @@ const refs = crossRefs(d.textNew);
     )
   }
 
-  {d.whatChanged && (
+  {ed && (
     <>
       <h2>What changed</h2>
-      <p>{d.whatChanged}</p>
+      <p class="lede">{ed.whatChanged}</p>
     </>
   )}
 

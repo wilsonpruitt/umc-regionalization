@@ -1,6 +1,12 @@
 import { getCollection, type CollectionEntry } from "astro:content";
+import { EDITORIAL } from "../editorial/summaries";
 
 export type Para = CollectionEntry<"paragraphs">;
+
+/** Editorial prose for a paragraph, or null if none has been written. */
+export function editorial(p: Para) {
+  return EDITORIAL[p.data.disciplineNumber] ?? null;
+}
 
 /**
  * The new 13 has no prior entry in the Discipline, so the extractor cannot read
@@ -31,7 +37,36 @@ export function groupLabel(p: Para): string {
 
 export async function allParagraphs(): Promise<Para[]> {
   const all = await getCollection("paragraphs");
-  return all.sort((a, b) => a.data.ballotNumber - b.data.ballotNumber);
+  const sorted = all.sort((a, b) => a.data.ballotNumber - b.data.ballotNumber);
+
+  // Every paragraph must carry editorial prose. Rendering "summary not yet
+  // written" was the right behaviour while the corpus was being built; now that
+  // the set is complete, a gap means someone added a paragraph and forgot the
+  // prose, and it should stop the build rather than ship as a visible hole.
+  const missing = sorted
+    .filter((p) => !EDITORIAL[p.data.disciplineNumber])
+    .map((p) => p.data.disciplineNumber);
+  if (missing.length > 0) {
+    throw new Error(
+      `No editorial prose for ¶${missing.join(", ¶")}. Add entries to ` +
+        `src/editorial/summaries.ts — it is keyed by Discipline number, not ballot number.`,
+    );
+  }
+
+  // Guard the other direction too: a stale key means a paragraph was renumbered
+  // and the prose is now silently attached to nothing.
+  const numbers = new Set(sorted.map((p) => p.data.disciplineNumber));
+  const orphans = Object.keys(EDITORIAL)
+    .map(Number)
+    .filter((n) => !numbers.has(n));
+  if (orphans.length > 0) {
+    throw new Error(
+      `src/editorial/summaries.ts has entries for ¶${orphans.join(", ¶")}, which ` +
+        `no longer exist in the corpus. Renumbered, or a typo?`,
+    );
+  }
+
+  return sorted;
 }
 
 export type Group = { label: string; renamedFrom?: string; paras: Para[] };

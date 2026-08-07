@@ -114,6 +114,26 @@ def clean_lines(block: str) -> str:
     return out
 
 
+# A line starting one of these begins a new block; anything else is a wrapped
+# continuation of the line above. Without this every line break the PDF happened
+# to contain survives into the HTML, and enumerated items wrap mid-sentence.
+ENUMERATOR = re.compile(r"^\s*(?:\d{1,2}\.(?!\d)|[a-z]\)|\([a-z]\))\s")
+
+
+def reflow(body: str) -> str:
+    """Join wrapped lines back into blocks, keeping breaks before enumerators."""
+    blocks: list[str] = []
+    for line in body.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
+        if not blocks or ENUMERATOR.match(line):
+            blocks.append(line)
+        else:
+            blocks[-1] = f"{blocks[-1]} {line}"
+    return "\n".join(blocks)
+
+
 def slice_between(text: str, start: str, end: str, *, label: str) -> str:
     i = text.find(start)
     j = text.find(end, i + 1) if i != -1 else -1
@@ -177,6 +197,7 @@ def main() -> None:
         body = re.sub(r"^¶ ?\d+\s*\.?\s*Article\s+[IVXL]+\s*\.?\s*[—–-]\s*", "", body)
         elided = bool(re.search(r"(?:^|\n)\s*\.\.\.\s*(?:\n|$)", body))
         body = re.sub(r"(?:^|\n)\s*\.\.\.\s*(?=\n|$)", "", body)
+        body = reflow(body)
 
         paras.append(
             Para(
