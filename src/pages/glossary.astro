@@ -1,0 +1,76 @@
+---
+import Base from "../layouts/Base.astro";
+
+const terms = [
+  {
+    term: "General Conference",
+    body: "The only body that speaks for the whole United Methodist Church. It meets every four years, and it alone may amend the Book of Discipline. A constitutional amendment must pass it by two-thirds before going to the annual conferences.",
+  },
+  {
+    term: "Annual conference",
+    body: "The basic body of the church — a regional grouping of congregations and clergy, meeting yearly. Clergy hold their membership here rather than in a congregation. Constitutional amendments are ratified by the aggregate vote of all annual conferences worldwide.",
+  },
+  {
+    term: "Central conference",
+    body: "Before this amendment, the organising body for the church outside the United States — eight of them, in Africa, Europe and the Philippines. A central conference could adapt parts of the Book of Discipline to its own legal and cultural setting. The amendment renames them regional conferences.",
+  },
+  {
+    term: "Jurisdictional conference",
+    body: "The organising body for the church within the United States — five of them. Jurisdictions elect and assign bishops, but unlike central conferences they have never had power to adapt the Discipline. The amendment makes them optional rather than required.",
+  },
+  {
+    term: "Regional conference",
+    body: "The single category the amendment creates. The former central conferences and the United States alike become regional conferences, each with the same authority to adapt the Discipline. The United States one does not yet exist.",
+  },
+  {
+    term: "Adaptation",
+    body: "The power to alter parts of the Book of Discipline for a region's own circumstances — clergy qualifications, forms of organisation, the hymnal and ritual, the trial process. The limit is whatever General Conference declares non-adaptable.",
+  },
+  {
+    term: "Non-adaptable",
+    body: "Legislation a regional conference may not change. Under the amended ¶17.17, General Conference fixes what is non-adaptable by a 60% vote — a higher bar than ordinary legislation, lower than a constitutional amendment.",
+  },
+  {
+    term: "Standing Committee on Central Conference Matters",
+    body: "The General Conference committee responsible for legislation affecting the church outside the United States. It approved the regionalization petition 29–0, and owes General Conference 2028 a joint study with the Connectional Table on perfecting the plan.",
+  },
+  {
+    term: "Christmas Covenant",
+    body: "A regionalization proposal originating with delegates from the Philippines, Africa and Europe, published in December 2019. The 2024 legislation builds on it, as the petition's own rationale states.",
+  },
+  {
+    term: "Ratification",
+    body: "The second step for a constitutional amendment. After General Conference adopts it by two-thirds, the annual conferences vote, and the amendment carries only if two-thirds of the aggregate worldwide vote approves. The Council of Bishops canvasses and certifies the result.",
+  },
+  {
+    term: "Restrictive Rules",
+    body: "Six provisions of the Constitution that General Conference may not revoke or change, protecting the Articles of Religion, the Confession of Faith, the general rules, the episcopacy, clergy trial rights, and the use of certain funds. Regional adaptation of the hymnal and ritual is expressly made subject to the first and second.",
+  },
+  {
+    term: "Book of Discipline",
+    body: "The book of law and doctrine governing The United Methodist Church, reissued after each General Conference. Its first paragraphs are the Constitution; the rest is ordinary legislation. Regionalization contemplates a general Discipline plus a regional Discipline for each region that publishes one.",
+  },
+];
+---
+
+<Base
+  title="Glossary — UMC regionalization"
+  description="The terms needed to read the regionalization amendment: central conference, jurisdiction, adaptation, non-adaptable, ratification."
+>
+  <p class="eyebrow">Reference</p>
+  <h1>Glossary</h1>
+  <p class="subtitle">
+    Enough vocabulary to read the paragraphs without a Discipline to hand.
+  </p>
+
+  <dl class="glossary">
+    {
+      terms.map((t) => (
+        <>
+          <dt>{t.term}</dt>
+          <dd>{t.body}</dd>
+        </>
+      ))
+    }
+  </dl>
+</Base>

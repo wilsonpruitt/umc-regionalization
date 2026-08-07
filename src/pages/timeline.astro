@@ -1,0 +1,101 @@
+---
+import Base from "../layouts/Base.astro";
+
+const events = [
+  {
+    when: "23 April 2024",
+    done: true,
+    title: "The legislative committee votes",
+    body: "The Standing Committee on Central Conference Matters approves the worldwide regionalization petition 29–0 as committee item ST29.",
+  },
+  {
+    when: "25 April 2024",
+    done: true,
+    title: "General Conference adopts it",
+    body: "Meeting in Charlotte, the postponed 2020 General Conference adopts Petition 21039 by 586 to 164 — comfortably over the two-thirds a constitutional amendment requires to go forward.",
+  },
+  {
+    when: "2024–2025",
+    done: true,
+    title: "The annual conferences vote",
+    body: "More than 120 annual conferences in Africa, Europe, the Philippines and the United States vote at their sessions. Only elders and deacons in full connection and lay members may vote; conferences are not permitted to publish their individual results.",
+  },
+  {
+    when: "5 November 2025",
+    done: true,
+    title: "The bishops certify the result",
+    body: "The Council of Bishops completes the canvass at its autumn meeting and announces that all four amendments are ratified. Regionalization carries with 91.6% of the aggregate vote, against a two-thirds threshold. The amendment takes effect.",
+  },
+  {
+    when: "Immediately on ratification",
+    done: true,
+    title: "Central conferences become regional conferences",
+    body: "Outside the United States the change is initially one of name and standing rather than structure. The existing central conferences continue, now as regional conferences, with adaptive authority stated in the Constitution rather than granted paragraph by paragraph.",
+  },
+  {
+    when: "Before General Conference 2028",
+    done: false,
+    title: "An interim committee organises the U.S. region",
+    body: "The Council of Bishops appoints an Interim Committee on Organization, drawn from General Conference delegates, to design the United States Regional Conference and bring enabling legislation.",
+  },
+  {
+    when: "General Conference 2028",
+    done: false,
+    title: "The enabling legislation is considered",
+    body: "General Conference receives the interim committee's proposals, together with a joint study by the Connectional Table and the Standing Committee on how to perfect regionalization — including whether regional conferences should keep jurisdictions.",
+  },
+  {
+    when: "After General Conference 2028",
+    done: false,
+    title: "The U.S. Regional Conference convenes",
+    body: "The first meeting follows General Conference. Until it happens, the United States has no regional conference and General Conference continues to legislate for it directly.",
+  },
+];
+---
+
+<Base
+  title="Timeline — UMC regionalization"
+  description="How the regionalization amendment moved from General Conference in 2024 to ratification in 2025, and what is scheduled next."
+>
+  <p class="eyebrow">Reference</p>
+  <h1>Timeline</h1>
+  <p class="subtitle">
+    From the committee vote to a United States regional conference that does not
+    yet exist.
+  </p>
+
+  <p class="lede">
+    Ratification finished the constitutional work and started the practical work.
+    The amendment is in force; most of what it enables has still to be built.
+  </p>
+
+  <ol class="timeline">
+    {
+      events.map((e) => (
+        <li class={e.done ? "done" : ""}>
+          <p class="when">{e.when}</p>
+          <h3>{e.title}</h3>
+          <p>{e.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <h2>The other three amendments</h2>
+
+  <p>
+    Regionalization was the first of four amendments on the same ballot, and the
+    only one this site covers. The others added <em>gender</em> and <em>ability</em>
+    to the categories protected from exclusion (¶4); named colonialism, white
+    privilege and white supremacy in the article on racial justice (¶5); and set
+    educational requirements for clergy voting for delegates (¶36). All four were
+    certified on the same day, each above 90%.
+  </p>
+
+  <p>
+    The fourth interacts with this one: it amends the same paragraph on clergy
+    delegates that regionalization also amends, and the ballot carried an editorial
+    note that its language would need updating if regionalization passed. Both
+    passed. See <a href="/p/36">¶36</a>.
+  </p>
+</Base>

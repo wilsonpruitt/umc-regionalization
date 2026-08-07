@@ -1,0 +1,84 @@
+---
+import Base from "../layouts/Base.astro";
+import { grouped, statusLabel } from "../lib/paragraphs";
+
+const groups = await grouped();
+const total = groups.reduce((n, g) => n + g.paras.length, 0);
+---
+
+<Base
+  title="The paragraphs — UMC regionalization"
+  description="Every constitutional paragraph amended, added, or struck by the regionalization amendment, with old and new text side by side."
+>
+  <p class="eyebrow">Reference</p>
+  <h1>The paragraphs</h1>
+  <p class="subtitle">
+    Everything the amendment touches, in the order it stands in the Constitution.
+  </p>
+
+  <p class="lede">
+    The amendment reaches {total} paragraphs: 26 amended, two struck, and one added.
+    Numbers below are those of the <strong>2024 Book of Discipline</strong>. The
+    ballot papers used a different set — see the note on each page, and the
+    <a href="/sources#numbering">explanation of the numbering</a>.
+  </p>
+
+  <table class="para-table">
+    <thead>
+      <tr>
+        <th scope="col">¶</th>
+        <th scope="col">What it governs</th>
+        <th scope="col">Change</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        groups.map((g) => (
+          <>
+            <tr class="section-head">
+              <td colspan="3">
+                {g.label}
+                {g.renamedFrom && <span class="renamed">was {g.renamedFrom}</span>}
+              </td>
+            </tr>
+            {g.paras.map((p) => (
+              <tr>
+                <td class="num">
+                  <a href={`/p/${p.data.disciplineNumber}`}>
+                    ¶{p.data.disciplineNumber}
+                  </a>
+                </td>
+                <td>
+                  <p>
+                    {p.data.summary ?? (
+                      <em>
+                        Article{" "}
+                        {p.data.articleNew || p.data.articleOld}. Plain-English
+                        summary not yet written.
+                      </em>
+                    )}
+                  </p>
+                </td>
+                <td>
+                  <span
+                    class={`badge badge--${
+                      p.data.status === "amended"
+                        ? p.data.rewritten
+                          ? "rewritten"
+                          : "amended"
+                        : p.data.status
+                    }`}
+                  >
+                    {p.data.status === "amended" && p.data.rewritten
+                      ? "Rewritten"
+                      : statusLabel(p)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </>
+        ))
+      }
+    </tbody>
+  </table>
+</Base>

@@ -1,0 +1,70 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+const nav = [
+  { href: "/paragraphs", label: "The paragraphs" },
+  { href: "/timeline", label: "Timeline" },
+  { href: "/open", label: "Still undecided" },
+  { href: "/glossary", label: "Glossary" },
+  { href: "/sources", label: "Sources" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">Regionalization</a>
+        <nav>
+          {
+            nav.map((n) => (
+              <a
+                href={n.href}
+                aria-current={path.startsWith(n.href) ? "page" : undefined}
+              >
+                {n.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>
+          A reference to the constitutional amendment on regionalization adopted
+          by the 2020/2024 General Conference of The United Methodist Church and
+          ratified by the annual conferences. It reproduces the text and records
+          what changed. It does not argue for or against the change.
+        </p>
+        <p>
+          Published by <a href="https://wrootlabs.com">Wroot Labs</a>. Not an
+          official publication of The United Methodist Church or any of its
+          agencies. Where this site and the Book of Discipline differ, the
+          Discipline governs. See <a href="/sources">sources</a>.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "umc-regionalization",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "extract": "python3.11 scripts/extract-amendments.py",
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:clean": "rm -rf node_modules/.astro .astro dist && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "check:dist": "bash scripts/check-dist.sh",
+    "predeploy": "pnpm run build:clean && pnpm run check:dist"
+  },
+  "dependencies": { "astro": "^5.9.0" },
+  "devDependencies": { "@astrojs/check": "^0.9.9", "typescript": "^5.9.3" }
+}
